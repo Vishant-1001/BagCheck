@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baggage Journey Integrity Checker</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">BJ</div>
+    <div>
+      <h1>Baggage Journey Integrity Checker</h1>
+      <p class="tagline">Validating baggage scan sequences against a predefined checkpoint-transition graph</p>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <label class="inline-field">
+      <span>Graph profile</span>
+      <select id="profile-select"></select>
+    </label>
+    <button id="btn-sample" class="btn ghost" type="button">Load sample stream</button>
+    <button id="btn-process-all" class="btn" type="button">&#9197; Process all</button>
+    <button id="btn-reset" class="btn danger-ghost" type="button">Reset</button>
+  </div>
+</header>
+
+<div class="disclaimer">
+  <strong>Academic simulation.</strong>
+  Synthetic scan data only &middot; not connected to any airline or airport system &middot; the graph defines what counts as a legal transition.
+</div>
+
+<main class="layout">
+
+  <!-- ======================= LEFT COLUMN ======================= -->
+  <aside class="column">
+    <section class="card">
+      <h2><span class="step">1</span> Scan event simulator</h2>
+      <label class="field">
+        <span>Bag ID</span>
+        <input id="bag-input" list="bag-suggestions" value="BAG1001" autocomplete="off" spellcheck="false">
+        <datalist id="bag-suggestions"></datalist>
+      </label>
+      <p class="hint">Pick a checkpoint and enqueue the scan. Events wait in the custom FIFO queue until processed.</p>
+      <div id="checkpoint-buttons" class="chip-grid"></div>
+      <div class="button-row">
+        <button id="btn-enqueue" class="btn primary" type="button">Enqueue scan</button>
+        <button id="btn-step" class="btn" type="button">&#9654; Process next</button>
+      </div>
+      <p class="hint" id="sim-feedback"></p>
+    </section>
+
+    <section class="card">
+      <h2><span class="step">2</span> Demo scenarios</h2>
+      <p class="hint">Each demo switches the graph profile, clears state and streams its scans through the queue.</p>
+      <div id="demo-list" class="demo-list"></div>
+    </section>
+
+    <section class="card">
+      <h2><span class="step">3</span> Event queue <span class="pill" id="queue-size">0</span></h2>
+      <p class="hint">Custom FIFO queue &mdash; enqueue at the back, validate from the front.</p>
+      <div id="queue-list" class="queue-list"></div>
+    </section>
+  </aside>
+
+  <!-- ======================= CENTER COLUMN ======================= -->
+  <section class="column wide">
+    <div id="status-card" class="card status-card"></div>
+
+    <section class="card">
+      <h2>Journey <select id="bag-select" class="inline-select"></select></h2>
+      <div id="journey" class="journey"></div>
+    </section>
+
+    <section class="card">
+      <h2>Checkpoint graph <span class="pill muted" id="graph-meta"></span></h2>
+      <p class="hint">Directed graph stored as an adjacency list. Layout coordinates come from <code>data/checkpoints.json</code>, so the picture is the same graph the Java engine validates against.</p>
+      <div class="graph-wrap">
+        <svg id="graph" viewBox="0 0 1040 320" role="img" aria-label="Checkpoint transition graph"></svg>
+      </div>
+      <div class="legend">
+        <span><i class="swatch traversed"></i> traversed</span>
+        <span><i class="swatch remaining"></i> remaining BFS route to ARRIVAL</span>
+        <span><i class="swatch reference"></i> reference process</span>
+        <span><i class="swatch rejected"></i> rejected attempt</span>
+        <span><i class="swatch stuck"></i> cannot reach ARRIVAL</span>
+        <span><i class="swatch current"></i> current checkpoint</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Event log</h2>
+      <p class="hint">Validation outcomes in processing order (FIFO).</p>
+      <div id="log" class="log"></div>
+    </section>
+  </section>
+
+  <!-- ======================= RIGHT COLUMN ======================= -->
+  <aside class="column">
+    <section class="card">
+      <h2>Statistics</h2>
+      <div id="stats" class="stat-grid"></div>
+      <h3>Custom hash table &mdash; baggage store</h3>
+      <div id="hash-stats" class="stat-grid small"></div>
+      <h3>Graph</h3>
+      <div id="graph-stats" class="stat-grid small"></div>
+    </section>
+
+    <section class="card">
+      <h2>Reference process</h2>
+      <div id="reference" class="reference"></div>
+      <p class="hint">An explicit ordered sequence, used <em>only</em> to report which expected checkpoint a legal shortcut skipped. The graph alone cannot prove what is missing.</p>
+    </section>
+
+    <section class="card">
+      <h2>How one event is validated</h2>
+      <ol class="steps">
+        <li>Hash lookup of the bag record</li>
+        <li>First scan initialises the state</li>
+        <li>Read the current checkpoint</li>
+        <li>Ask the graph: does <code>current &rarr; next</code> exist?</li>
+        <li>Classify: valid / duplicate / invalid / unknown</li>
+        <li>Update state &mdash; rejected scans never advance it</li>
+        <li>BFS: is ARRIVAL still reachable?</li>
+      </ol>
+    </section>
+  </aside>
+
+</main>
+
+<footer class="footer">
+  Graph + custom queue + custom hash table + BFS/DFS &mdash; implemented from scratch in Java, no external libraries.
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# Compiled output (regenerate with run.sh / run.bat)
+build/
+build-tests/
+*.class
+
+# Local portable JDK used on this machine only; the project itself needs nothing but javac/java
+.tools/
+
+# Local run artefacts
+server.log
+.server.pid
+
+# Editor / OS noise
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

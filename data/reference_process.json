@@ -1,0 +1,5 @@
+{
+  "name": "Reference process",
+  "note": "An explicit ordered reference sequence. It is used ONLY to report EXPECTED CHECKPOINT SKIPPED when the observed journey takes a legal graph edge that deviates from this reference order. A general graph cannot by itself tell you which checkpoint was skipped, so we surface this as an advisory, never as a proven fact.",
+  "checkpoints": ["CHECK_IN", "SECURITY", "LOADING", "TRANSFER", "ARRIVAL"]
+}

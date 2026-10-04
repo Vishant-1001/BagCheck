@@ -1,0 +1,48 @@
+{
+  "note": "Simulated domain vocabulary. These are the logical checkpoints used by this academic simulation, simplified from real baggage scan points.",
+  "finalCheckpoint": "ARRIVAL",
+  "checkpoints": [
+    {
+      "id": "CHECK_IN",
+      "label": "Check-In",
+      "description": "Bag is accepted at the check-in counter and a bag tag is attached. Entry point of the journey.",
+      "x": 100,
+      "y": 90
+    },
+    {
+      "id": "SECURITY",
+      "label": "Security",
+      "description": "Bag passes through the security screening checkpoint.",
+      "x": 310,
+      "y": 90
+    },
+    {
+      "id": "LOADING",
+      "label": "Loading",
+      "description": "Bag is loaded into the aircraft hold / container.",
+      "x": 520,
+      "y": 90
+    },
+    {
+      "id": "TRANSFER",
+      "label": "Transfer",
+      "description": "Bag is moved between aircraft or flights at a transfer hub.",
+      "x": 730,
+      "y": 90
+    },
+    {
+      "id": "ARRIVAL",
+      "label": "Arrival",
+      "description": "Bag is delivered to the arrivals / reclaim area. Terminal state of the journey.",
+      "x": 940,
+      "y": 90
+    },
+    {
+      "id": "QUARANTINE",
+      "label": "Quarantine Hold",
+      "description": "Dead-end holding area used only by the alternate demo process configuration. A bag sent here can no longer reach ARRIVAL.",
+      "x": 520,
+      "y": 250
+    }
+  ]
+}

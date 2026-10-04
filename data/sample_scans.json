@@ -1,0 +1,19 @@
+{
+  "note": "Deterministic SIMULATED scan stream. Not real airline data. Events are enqueued into the custom FIFO queue and processed in arrival order, so events for different bags are interleaved.",
+  "scans": [
+    { "bagId": "BAG1001", "checkpoint": "CHECK_IN" },
+    { "bagId": "BAG2002", "checkpoint": "CHECK_IN" },
+    { "bagId": "BAG1001", "checkpoint": "SECURITY" },
+    { "bagId": "BAG3003", "checkpoint": "CHECK_IN" },
+    { "bagId": "BAG1001", "checkpoint": "SECURITY" },
+    { "bagId": "BAG2002", "checkpoint": "SECURITY" },
+    { "bagId": "BAG1001", "checkpoint": "LOADING" },
+    { "bagId": "BAG3003", "checkpoint": "SECURITY" },
+    { "bagId": "BAG2002", "checkpoint": "LOADING" },
+    { "bagId": "BAG1001", "checkpoint": "TRANSFER" },
+    { "bagId": "BAG3003", "checkpoint": "ARRIVAL" },
+    { "bagId": "BAG2002", "checkpoint": "ARRIVAL" },
+    { "bagId": "BAG1001", "checkpoint": "ARRIVAL" },
+    { "bagId": "BAG3003", "checkpoint": "LOADING" }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "note": "Simulated scan sequences used for the live demo. Each demo names the graph profile it must run on, so DEMO 5 can reconfigure the graph before running.",
+  "demos": [
+    {
+      "id": "demo1",
+      "title": "DEMO 1 - Valid journey",
+      "profile": "standard",
+      "bagId": "DEMO-1001",
+      "scans": ["CHECK_IN", "SECURITY", "LOADING", "TRANSFER", "ARRIVAL"],
+      "expected": "VALID JOURNEY",
+      "explanation": "Every consecutive pair of checkpoints is a legal edge of the standard graph, and the bag reaches the terminal state ARRIVAL."
+    },
+    {
+      "id": "demo2",
+      "title": "DEMO 2 - Duplicate scan",
+      "profile": "standard",
+      "bagId": "DEMO-1002",
+      "scans": ["CHECK_IN", "SECURITY", "SECURITY"],
+      "expected": "ANOMALY DETECTED / DUPLICATE CHECKPOINT",
+      "explanation": "The bag is already at SECURITY when SECURITY is scanned again. No self-loop exists in the graph, so the repeated scan is a duplicate, not a transition."
+    },
+    {
+      "id": "demo3",
+      "title": "DEMO 3 - Invalid transition",
+      "profile": "standard",
+      "bagId": "DEMO-1003",
+      "scans": ["CHECK_IN", "SECURITY", "ARRIVAL"],
+      "expected": "ANOMALY DETECTED / INVALID TRANSITION",
+      "explanation": "SECURITY -> ARRIVAL is not an edge of the standard graph. The scan is rejected and the bag stays at SECURITY."
+    },
+    {
+      "id": "demo4",
+      "title": "DEMO 4 - Incomplete journey",
+      "profile": "standard",
+      "bagId": "DEMO-1004",
+      "scans": ["CHECK_IN", "SECURITY", "LOADING"],
+      "expected": "INCOMPLETE JOURNEY",
+      "explanation": "All observed transitions are legal and ARRIVAL is still reachable, but the bag has not been observed at ARRIVAL. It is incomplete, not invalid."
+    },
+    {
+      "id": "demo5",
+      "title": "DEMO 5 - Unreachable arrival",
+      "profile": "deadend",
+      "bagId": "DEMO-1005",
+      "scans": ["CHECK_IN", "SECURITY", "LOADING"],
+      "expected": "ARRIVAL UNREACHABLE",
+      "explanation": "This demo first switches the graph to the quarantine profile. The same scans as DEMO 4 stay legal, and ARRIVAL is reachable while the bag is at CHECK_IN and SECURITY. After LOADING -> QUARANTINE (a dead end) BFS proves ARRIVAL can no longer be reached; the first two events are merely INCOMPLETE."
+    }
+  ]
+}

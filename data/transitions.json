@@ -1,0 +1,27 @@
+{
+  "note": "The directed graph is data, not code. Validation rules are NOT written as if/else chains; they are read from these adjacency lists at startup.",
+  "defaultProfile": "standard",
+  "profiles": {
+    "standard": {
+      "name": "Standard process graph",
+      "description": "Linear journey plus one legal shortcut LOADING -> ARRIVAL (short-haul bags that are not transferred).",
+      "edges": [
+        { "from": "CHECK_IN", "to": "SECURITY" },
+        { "from": "SECURITY", "to": "LOADING" },
+        { "from": "LOADING", "to": "TRANSFER" },
+        { "from": "LOADING", "to": "ARRIVAL" },
+        { "from": "TRANSFER", "to": "ARRIVAL" }
+      ]
+    },
+    "deadend": {
+      "name": "Quarantine (dead-end) process graph",
+      "description": "Alternate DEMO configuration. ARRIVAL is still reachable from CHECK_IN and SECURITY (via the direct re-route SECURITY -> ARRIVAL), but LOADING now routes bags to QUARANTINE, which has no outgoing transition. After LOADING, ARRIVAL is unreachable, and only the BFS reachability check can detect that.",
+      "edges": [
+        { "from": "CHECK_IN", "to": "SECURITY" },
+        { "from": "SECURITY", "to": "ARRIVAL" },
+        { "from": "SECURITY", "to": "LOADING" },
+        { "from": "LOADING", "to": "QUARANTINE" }
+      ]
+    }
+  }
+}
